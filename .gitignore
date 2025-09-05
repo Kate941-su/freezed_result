@@ -57,7 +57,3 @@ test/.test_coverage.dart
 
 # FVM Version Cache
 .fvm/
-
-# Eliminate generated files
-*/**/*.freezed.dart
-*/**/*.g.dart
