@@ -1,6 +1,5 @@
-# freezed_result
+# fresult
 
-[![pub package](https://img.shields.io/pub/v/freezed_result.svg)](https://pub.dev/packages/freezed_result)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A Dart package providing Result types for better error handling using [Freezed](https://pub.dev/packages/freezed). This package helps you write more robust and functional code by avoiding exceptions and providing type-safe error handling.

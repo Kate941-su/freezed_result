@@ -1,4 +1,4 @@
-import 'package:freezed_result/freezed_result.dart';
+import 'package:fresult/fresult.dart';
 
 // Custom error types for better error handling
 sealed class ApiError {

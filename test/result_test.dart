@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import 'package:freezed_result/freezed_result.dart';
+import 'package:fresult/fresult.dart';
 
 void main() {
   group('Result', () {

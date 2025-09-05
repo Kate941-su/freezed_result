@@ -1,4 +1,4 @@
-import 'package:freezed_result/freezed_result.dart';
+import 'package:fresult/fresult.dart';
 
 void main() {
   print('🚀 Basic Result Usage Examples\n');
