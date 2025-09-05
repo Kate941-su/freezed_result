@@ -244,21 +244,87 @@ void main() async {
 
 ## Running Examples
 
-The package includes several example applications:
+The package includes comprehensive example applications:
 
 ```bash
-# Basic usage
+# Basic usage and transformations
 dart run example/basic_usage.dart
 
-# Transformation examples
-dart run example/transformation_examples.dart
-
-# Async examples
-dart run example/async_examples.dart
-
-# Real-world example
-dart run example/real_world_example.dart
+# Real-world API example with error handling
+dart run example/api_example.dart
 ```
+
+### Example 1: Basic Usage (`example/basic_usage.dart`)
+
+Demonstrates fundamental Result operations:
+- Creating success and failure results
+- Pattern matching with `when`
+- Using extensions for side effects
+- Value extraction with defaults
+- Transformations and chaining
+- Working with nullable values
+- Error handling patterns
+
+### Example 2: API Example (`example/api_example.dart`)
+
+A comprehensive real-world example showing:
+- Custom error types (NetworkError, ValidationError, etc.)
+- User service with CRUD operations
+- Complex error handling scenarios
+- Chaining async operations
+- Error transformation to user-friendly messages
+- Side effects with extensions
+
+## Development Workflow
+
+### Local Testing
+
+Use the provided test script to run all checks locally:
+
+```bash
+./scripts/test.sh
+```
+
+This script will:
+- Install dependencies
+- Generate Freezed code
+- Check formatting
+- Run static analysis
+- Run all tests
+
+### GitHub Actions
+
+The repository includes automated workflows:
+
+#### 1. CI Workflow (`.github/workflows/ci.yml`)
+- Runs on every push and pull request
+- Executes tests, formatting checks, and static analysis
+- Generates test coverage reports
+
+#### 2. Test and Auto-PR Workflow (`.github/workflows/test-and-pr.yml`)
+- Triggers on pushes to `develop` branch
+- Runs `result_test.dart` and `result_extensions_test.dart`
+- Automatically creates a pull request to `main` when tests pass
+- Auto-merges the PR after approval
+
+#### 3. Publish Workflow (`.github/workflows/publish.yml`)
+- Triggers on GitHub releases
+- Publishes the package to pub.dev automatically
+
+### Branch Strategy
+
+- `develop` - Development branch for new features
+- `main` - Production-ready code
+- Feature branches - Created from `develop`
+
+### Workflow Steps
+
+1. **Develop**: Work on features in the `develop` branch
+2. **Test**: Push to `develop` triggers automatic testing
+3. **Auto-PR**: If tests pass, a PR to `main` is created automatically
+4. **Review**: Review and approve the auto-created PR
+5. **Merge**: PR is automatically merged to `main`
+6. **Release**: Create a GitHub release to publish to pub.dev
 
 ## Testing
 

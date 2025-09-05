@@ -1,0 +1,138 @@
+name: Test and Create PR
+
+on:
+  push:
+    branches: [ develop ]
+  pull_request:
+    branches: [ develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Dart
+      uses: dart-lang/setup-dart@v1
+      with:
+        sdk: stable
+        
+    - name: Install dependencies
+      run: dart pub get
+      
+    - name: Generate code
+      run: dart run build_runner build --delete-conflicting-outputs
+      
+    - name: Run tests
+      run: dart test test/result_test.dart test/result_extensions_test.dart
+      
+    - name: Run all tests
+      run: dart test
+      
+    - name: Check formatting
+      run: dart format --output=none --set-exit-if-changed .
+      
+    - name: Analyze code
+      run: dart analyze
+
+  create-pr:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
+        
+    - name: Setup Git
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        
+    - name: Check if PR already exists
+      id: check-pr
+      run: |
+        # Check if there's already an open PR from develop to main
+        PR_EXISTS=$(gh pr list --base main --head develop --state open --json number --jq '.[0].number' || echo "")
+        if [ -n "$PR_EXISTS" ]; then
+          echo "pr_exists=true" >> $GITHUB_OUTPUT
+          echo "pr_number=$PR_EXISTS" >> $GITHUB_OUTPUT
+        else
+          echo "pr_exists=false" >> $GITHUB_OUTPUT
+        fi
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Create Pull Request
+      if: steps.check-pr.outputs.pr_exists == 'false'
+      run: |
+        gh pr create \
+          --title "🚀 Auto-merge: develop → main" \
+          --body "## 📋 Summary
+        
+        This PR was automatically created after all tests passed on the develop branch.
+        
+        ### ✅ Tests Passed
+        - \`result_test.dart\` - All Result type tests passed
+        - \`result_extensions_test.dart\` - All extension tests passed
+        - Code formatting and analysis checks passed
+        
+        ### 🔄 Auto-merge
+        This PR will be automatically merged once approved.
+        
+        ---
+        *This PR was created automatically by GitHub Actions*" \
+          --base main \
+          --head develop \
+          --label "auto-merge,ci-passed"
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Update existing PR
+      if: steps.check-pr.outputs.pr_exists == 'true'
+      run: |
+        gh pr comment ${{ steps.check-pr.outputs.pr_number }} \
+          --body "🔄 **Tests re-ran and passed!**
+          
+          All tests are still passing:
+          - ✅ \`result_test.dart\` 
+          - ✅ \`result_extensions_test.dart\`
+          - ✅ Code formatting and analysis
+          
+          *Updated: $(date -u +'%Y-%m-%d %H:%M:%S UTC')*"
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  auto-merge:
+    needs: [test, create-pr]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Auto-merge PR
+      run: |
+        # Get the PR number
+        PR_NUMBER=$(gh pr list --base main --head develop --state open --json number --jq '.[0].number')
+        
+        if [ -n "$PR_NUMBER" ]; then
+          echo "Auto-merging PR #$PR_NUMBER"
+          
+          # Enable auto-merge
+          gh pr merge $PR_NUMBER --auto --squash --delete-branch
+          
+          echo "✅ PR #$PR_NUMBER has been set to auto-merge"
+        else
+          echo "❌ No open PR found from develop to main"
+        fi
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

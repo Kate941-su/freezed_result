@@ -60,6 +60,10 @@ extension ResultExtensions<S, E> on Result<S, E> {
   S? valueOr(S? defaultValue) =>
       when(success: (value) => value, failure: (_) => defaultValue);
 
+  /// Returns the success value or computes and returns a default
+  S valueOrElse(S Function() defaultValue) =>
+      when(success: (value) => value, failure: (_) => defaultValue());
+
   /// Executes a function if this is a Success
   Result<S, E> onSuccess(void Function(S) action) {
     if (this is Success<S, E>) {
