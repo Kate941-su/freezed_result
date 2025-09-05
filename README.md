@@ -353,4 +353,4 @@ See [CHANGELOG.md](CHANGELOG.md) for a list of changes and version history.
 
 ## Support
 
-If you find this package helpful, please consider giving it a ⭐ on [pub.dev](https://pub.dev/packages/freezed_result)!
+If you find this package helpful, please consider giving it a ⭐ on [github](https://github.com/Kate941-su/freezed_result) and 👍 on [pub.dev](https://pub.dev/packages/fresult)!
