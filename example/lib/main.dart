@@ -130,4 +130,148 @@ void main() {
 
   print('Success values: $successValues');
   print('Errors: $errors');
+
+  print('🎯 Using the `when` method with Result types\n');
+
+  // Example 1: Basic when usage
+  print('=== Example 1: Basic when Usage ===');
+
+  final successResult = Result<String, String>.success('Hello World');
+  final failureResult = Result<String, String>.failure('Something went wrong');
+
+  // Using when for pattern matching
+  successResult.when(
+    success: (value) => print('✅ Success: $value'),
+    failure: (error) => print('❌ Error: $error'),
+  );
+
+  failureResult.when(
+    success: (value) => print('✅ Success: $value'),
+    failure: (error) => print('❌ Error: $error'),
+  );
+
+  // Example 2: when with return values
+  print('\n=== Example 2: when with Return Values ===');
+
+  final successMessage = successResult.when(
+    success: (value) => 'Got value: $value',
+    failure: (error) => 'Got error: $error',
+  );
+
+  final failureMessage = failureResult.when(
+    success: (value) => 'Got value: $value',
+    failure: (error) => 'Got error: $error',
+  );
+
+  print('Success message: $successMessage');
+  print('Failure message: $failureMessage');
+
+  // Example 3: when with different types
+  print('\n=== Example 3: when with Different Types ===');
+
+  final numberResult = Result<int, String>.success(42);
+  final stringResult = numberResult.when(
+    success: (value) => 'The number is: $value',
+    failure: (error) => 'Error: $error',
+  );
+
+  print('String result: $stringResult');
+
+  // Example 4: when with complex operations
+  print('\n=== Example 4: when with Complex Operations ===');
+
+  final results = [
+    Result.success(10),
+    Result.failure('Network error'),
+    Result.success(20),
+    Result.failure('Validation error'),
+    Result.success(30),
+  ];
+
+  print('Processing results with when:');
+  for (final result in results) {
+    final processed = result.when(
+      success: (value) {
+        print('  ✅ Processing value: $value');
+        return value * 2; // Double the value
+      },
+      failure: (error) {
+        print('  ❌ Handling error: $error');
+        return 0; // Default value for errors
+      },
+    );
+    print('  Result: $processed');
+  }
+
+  // Example 5: when with async operations
+  print('\n=== Example 5: when with Async Operations ===');
+
+  final asyncResult = Result<String, String>.success('Async data');
+
+  // Note: when itself is not async, but you can use it with async functions
+  final asyncProcessed = asyncResult.when(
+    success: (value) async {
+      await Future.delayed(Duration(milliseconds: 100));
+      return 'Processed: $value';
+    },
+    failure: (error) async {
+      await Future.delayed(Duration(milliseconds: 50));
+      return 'Error processed: $error';
+    },
+  );
+
+  // Since when returns a Future, we need to await it
+  asyncProcessed.then((result) {
+    print('Async result: $result');
+  });
+
+  // Example 6: when with side effects
+  print('\n=== Example 6: when with Side Effects ===');
+
+  final userResult = Result<String, String>.success('john@example.com');
+
+  userResult.when(
+    success: (email) {
+      print('📧 Sending welcome email to: $email');
+      print('📊 Logging user registration');
+      print('🎉 User successfully registered!');
+    },
+    failure: (error) {
+      print('🚨 Registration failed: $error');
+      print('📝 Logging error for debugging');
+      print('🔄 Retrying registration...');
+    },
+  );
+
+  // Example 7: when with conditional logic
+  print('\n=== Example 7: when with Conditional Logic ===');
+
+  final ageResult = Result<int, String>.success(25);
+
+  final category = ageResult.when(
+    success: (age) {
+      if (age < 18) return 'Minor';
+      if (age < 65) return 'Adult';
+      return 'Senior';
+    },
+    failure: (error) => 'Unknown (Error: $error)',
+  );
+
+  print('Age category: $category');
+
+  // Example 8: when with data transformation
+  print('\n=== Example 8: when with Data Transformation ===');
+
+  final dataResult = Result<Map<String, dynamic>, String>.success({
+    'name': 'John Doe',
+    'age': 30,
+    'email': 'john@example.com',
+  });
+
+  final userInfo = dataResult.when(
+    success: (data) => '${data['name']} (${data['age']}) - ${data['email']}',
+    failure: (error) => 'Failed to load user data: $error',
+  );
+
+  print('User info: $userInfo');
 }
