@@ -10,13 +10,17 @@ environment:
 
 # When you custom your own fresult version, you can uncomment the following dependencies and dev_dependencies
 # dependencies:
-#   freezed_annotation: ^3.0.0
 
-# dev_dependencies:
-#   build_runner: 2.7.1
-#   freezed: ^3.1.0
-#   lints: ^6.0.0
-#   test: ^1.26.3
+
+dependencies:
+  freezed_annotation: ^3.0.0
+
+dev_dependencies:
+  lints: ^6.0.0
+  test: ^1.26.3
+  build_runner: 2.7.1
+  freezed: ^3.1.0
+
 
 topics:
   - result
