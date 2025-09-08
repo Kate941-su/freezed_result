@@ -54,6 +54,3 @@ coverage/
 
 # Test related
 test/.test_coverage.dart
-
-# FVM Version Cache
-.fvm/
