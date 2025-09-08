@@ -20,11 +20,11 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  freezed_result: ^1.0.0
+  fresult: ^1.1.1
 
 dev_dependencies:
-  build_runner: ^2.4.7
-  freezed: ^2.4.6
+  build_runner: ^2.7.1
+  freezed: ^3.1.0
 ```
 
 Then run:
@@ -37,7 +37,7 @@ dart run build_runner build
 ## Quick Start
 
 ```dart
-import 'package:freezed_result/freezed_result.dart';
+import 'package:fresult/fresult.dart';
 
 void main() {
   // Create a successful result
@@ -167,7 +167,7 @@ final chained = await futureResult.flatMap((value) =>
 ### Basic Usage
 
 ```dart
-import 'package:freezed_result/freezed_result.dart';
+import 'package:fresult/fresult.dart';
 
 void main() {
   // Creating Results
