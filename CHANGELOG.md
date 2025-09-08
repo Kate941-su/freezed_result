@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.2] - 2025-09-08
+## Change
+- Fix README.md
+
 ## [1.1.1] - 2025-09-08
 ## Change
 - Bug fix
@@ -26,7 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2025-09-05
 
 ### Added
-- Initial release of `freezed_result` package
+- Initial release of `fresult` package
 - `Result<T, E>` sealed class with `Success` and `Failure` variants
 - Comprehensive set of methods for working with Results:
   - `map()` - Transform success values
