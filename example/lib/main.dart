@@ -136,16 +136,16 @@ void main() {
   // Example 1: Basic when usage
   print('=== Example 1: Basic when Usage ===');
 
-  final successResult = Result<String, String>.success('Hello World');
-  final failureResult = Result<String, String>.failure('Something went wrong');
+  final successResult2 = Result<String, String>.success('Hello World');
+  final failureResult2 = Result<String, String>.failure('Something went wrong');
 
   // Using when for pattern matching
-  successResult.when(
+  successResult2.when(
     success: (value) => print('✅ Success: $value'),
     failure: (error) => print('❌ Error: $error'),
   );
 
-  failureResult.when(
+  failureResult2.when(
     success: (value) => print('✅ Success: $value'),
     failure: (error) => print('❌ Error: $error'),
   );
@@ -153,12 +153,12 @@ void main() {
   // Example 2: when with return values
   print('\n=== Example 2: when with Return Values ===');
 
-  final successMessage = successResult.when(
+  final successMessage = successResult2.when(
     success: (value) => 'Got value: $value',
     failure: (error) => 'Got error: $error',
   );
 
-  final failureMessage = failureResult.when(
+  final failureMessage = failureResult2.when(
     success: (value) => 'Got value: $value',
     failure: (error) => 'Got error: $error',
   );
@@ -169,8 +169,8 @@ void main() {
   // Example 3: when with different types
   print('\n=== Example 3: when with Different Types ===');
 
-  final numberResult = Result<int, String>.success(42);
-  final stringResult = numberResult.when(
+  final numberResult2 = Result<int, String>.success(42);
+  final stringResult = numberResult2.when(
     success: (value) => 'The number is: $value',
     failure: (error) => 'Error: $error',
   );
@@ -180,7 +180,7 @@ void main() {
   // Example 4: when with complex operations
   print('\n=== Example 4: when with Complex Operations ===');
 
-  final results = [
+  final results2 = [
     Result.success(10),
     Result.failure('Network error'),
     Result.success(20),
@@ -189,7 +189,7 @@ void main() {
   ];
 
   print('Processing results with when:');
-  for (final result in results) {
+  for (final result in results2) {
     final processed = result.when(
       success: (value) {
         print('  ✅ Processing value: $value');

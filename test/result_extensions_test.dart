@@ -1,5 +1,5 @@
-import 'package:test/test.dart';
 import 'package:fresult/fresult.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('ResultExtensions', () {
@@ -18,7 +18,7 @@ void main() {
 
       test('should not execute callback for failure', () {
         const result = Result<String, String>.failure('Error');
-        bool callbackExecuted = false;
+        var callbackExecuted = false;
 
         result.onSuccess((value) {
           callbackExecuted = true;
@@ -43,7 +43,7 @@ void main() {
 
       test('should not execute callback for success', () {
         const result = Result<String, String>.success('Hello');
-        bool callbackExecuted = false;
+        var callbackExecuted = false;
 
         result.onFailure((error) {
           callbackExecuted = true;
@@ -56,7 +56,7 @@ void main() {
 
   group('NullableToResult', () {
     test('should convert non-null value to success', () {
-      const String? value = 'Hello';
+      const value = 'Hello';
       final result = value.toResult();
 
       expect(result.isSuccess, isTrue);
@@ -83,7 +83,7 @@ void main() {
   group('FutureResultExtensions', () {
     group('map', () {
       test('should map success value of Future Result', () async {
-        final futureResult = Future.value(Result<int, String>.success(5));
+        final futureResult = Future.value(const Result<int, String>.success(5));
         final mapped = await futureResult.mapResult((value) => value * 2);
 
         expect(mapped.isSuccess, isTrue);
@@ -91,7 +91,8 @@ void main() {
       });
 
       test('should not map failure of Future Result', () async {
-        final futureResult = Future.value(Result<int, String>.failure('Error'));
+        final futureResult =
+            Future.value(const Result<int, String>.failure('Error'));
         final mapped = await futureResult.mapResult((value) => value * 2);
 
         expect(mapped.isFailure, isTrue);
@@ -101,7 +102,7 @@ void main() {
 
     group('mapError', () {
       test('should not map success error of Future Result', () async {
-        final futureResult = Future.value(Result<int, String>.success(5));
+        final futureResult = Future.value(const Result<int, String>.success(5));
         final mapped =
             await futureResult.mapErrorResult((error) => 'Mapped: $error');
 
@@ -110,7 +111,8 @@ void main() {
       });
 
       test('should map failure error of Future Result', () async {
-        final futureResult = Future.value(Result<int, String>.failure('Error'));
+        final futureResult =
+            Future.value(const Result<int, String>.failure('Error'));
         final mapped =
             await futureResult.mapErrorResult((error) => 'Mapped: $error');
 
@@ -121,24 +123,24 @@ void main() {
 
     group('flatMap', () {
       test('should chain success to success in Future Result', () async {
-        final futureResult = Future.value(Result<int, String>.success(5));
+        final futureResult = Future.value(const Result<int, String>.success(5));
         final chained = await futureResult
-            .flatMapResult((value) => (Result.success(value * 2)));
+            .flatMapResult((value) => Result.success(value * 2));
         expect(chained.isSuccess, isTrue);
         expect(chained.valueOrNull, equals(10));
       });
 
       test('should chain success to failure in Future Result', () async {
-        final futureResult = Future.value(Result<int, String>.success(5));
+        final futureResult = Future.value(const Result<int, String>.success(5));
         final chained = await futureResult
-            .flatMapResult((value) => Result.failure('Chained error'));
+            .flatMapResult((value) => const Result.failure('Chained error'));
         expect(chained.isFailure, isTrue);
         expect(chained.errorOrNull, equals('Chained error'));
       });
 
       test('should not chain failure in Future Result', () async {
         final futureResult =
-            Future.value(Result<int, String>.failure('Original error'));
+            Future.value(const Result<int, String>.failure('Original error'));
         final chained = await futureResult
             .flatMapResult((value) => Result.success(value * 2));
 

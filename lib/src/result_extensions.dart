@@ -16,44 +16,43 @@ extension ResultExtensions<S, E> on Result<S, E> {
   /// Transforms the success value using the provided function
   Result<T, E> mapResult<T>(T Function(S) transform) => when(
         success: (value) => Result.success(transform(value)),
-        failure: (error) => Result.failure(error),
+        failure: Result.failure,
       );
 
   /// Maps the failure error to a new type.
   Result<S, F> mapErrorResult<F>(F Function(E) mapper) => when(
-        success: (value) => Result.success(value),
+        success: Result.success,
         failure: (error) => Result.failure(mapper(error)),
       );
 
   /// Transforms the success value using an async function
   Future<Result<T, E>> mapAsyncResult<T>(
-      Future<T> Function(S) transform) async {
-    return when(
-      success: (value) async => Result.success(await transform(value)),
-      failure: (error) async => Result.failure(error),
-    );
-  }
+    Future<T> Function(S) transform,
+  ) async =>
+      when(
+        success: (value) async => Result.success(await transform(value)),
+        failure: (error) async => Result.failure(error),
+      );
 
   /// Chains another Result-returning operation
   Result<T, E> flatMapResult<T>(Result<T, E> Function(S) transform) => when(
         success: (value) => transform(value),
-        failure: (error) => Result.failure(error),
+        failure: Result.failure,
       );
 
   /// Chains another async Result-returning operation
   Future<Result<T, E>> flatMapAsyncResult<T>(
     Future<Result<T, E>> Function(S) transform,
-  ) async {
-    return when(
-      success: (value) async => await transform(value),
-      failure: (error) async => Result.failure(error),
-    );
-  }
+  ) async =>
+      when(
+        success: (value) async => transform(value),
+        failure: (error) async => Result.failure(error),
+      );
 
   /// Returns the success value or throws the error
   S get valueOrThrow => when(
         success: (value) => value,
-        failure: (error) => throw Exception('${error.toString()}'),
+        failure: (error) => throw Exception(error.toString()),
       );
 
   /// Returns the success value or the provided default
@@ -84,10 +83,11 @@ extension ResultExtensions<S, E> on Result<S, E> {
 /// Extensions for working with nullable values and converting them to Results.
 extension NullableToResult<T> on T? {
   /// Converts a nullable value to a Result.
-  /// Returns [Result.success] if the value is not null, otherwise [Result.failure].
+  /// Returns [Result.success] if the value is not null,
+  /// otherwise [Result.failure].
   Result<T, String> toResult([String? errorMessage]) {
     if (this != null) {
-      return Result.success(this!);
+      return Result.success(this as T);
     }
     return Result.failure(errorMessage ?? 'Value is null');
   }

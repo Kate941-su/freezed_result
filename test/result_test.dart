@@ -1,5 +1,5 @@
-import 'package:test/test.dart';
 import 'package:fresult/fresult.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('Result', () {
@@ -39,8 +39,8 @@ void main() {
       test('should throw error when calling valueOrThrow', () {
         try {
           const result = Result<String, String>.failure('Error');
-          final value = result.valueOrThrow;
-        } catch (e) {
+          final _ = result.valueOrThrow;
+        } on Exception catch (e) {
           expect(e, isA<Exception>());
         }
       });
@@ -100,8 +100,8 @@ void main() {
 
       test('should chain success to failure', () {
         const result = Result<int, String>.success(5);
-        final chained =
-            result.flatMapResult((value) => Result.failure('Chained error'));
+        final chained = result
+            .flatMapResult((value) => const Result.failure('Chained error'));
 
         expect(chained.isFailure, isTrue);
         expect(chained.errorOrNull, equals('Chained error'));
